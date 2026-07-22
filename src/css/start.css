@@ -41,7 +41,7 @@
     display: flex;
     position: absolute;
     flex-direction: row;
-    animation: nuvensDianteiras linear infinite 48s;
+    animation: nuvensDianteiras linear infinite 49s;
 }
 
 #telaInicial .telaInicialNuvensDianteiras div {
@@ -158,6 +158,35 @@
     width: 65%;
 }
 
+#telaInicial .telaInicialBotaoContent {
+    z-index: 3;
+    width: 100%;
+    bottom: 15%;
+    position: absolute;
+    text-align: center;
+}
+
+#telaInicial .telaInicialBotao {
+    font-family: var(--font);
+    padding: .3rem .1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    padding: .5rem .4rem;
+    background-color: var(--botao);
+    border: none;
+    box-shadow: 
+        0px 3px 0px 0px var(--botao),
+        0px -3px 0px 0px var(--botao),
+        3px 0px 0px 0px var(--botao),
+        -3px 0px 0px 0px var(--botao),
+        0px 0px 0px 2px var(--botao),
+        0px 6px 0px 0px #000000,
+        0px -6px 0px 0px #000000,
+        6px 0px 0px 0px #000000,
+        -6px 0px 0px 0px #000000,
+     0px 0px 0px 4.5px #000000;   
+} 
 
 /*==================================================================== 
 ................. ÁREA RESERVADA PARA AS MEDIA QUERYS ................
