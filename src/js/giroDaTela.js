@@ -1,3 +1,13 @@
+function giroDaTela() {
+    document.documentElement.requestFullscreen().then(() => screen.orientation.lock("portrait"));
+}
+
+
+
+
+
+
+
 // const mario = document.querySelector (".mario");
 // const tela = document.querySelector (".game-board");
 // const pontuacao = document.getElementById ("pontuacao");

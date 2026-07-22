@@ -1,3 +1,48 @@
+@import url(./start.css);
+
+@font-face {
+    font-weight: 400;
+    font-style: normal;
+    font-family: "Press Start 2P";
+    src: url(../font/PressStart2P-Regular.ttf) format("truetype");;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --font: "Press Start 2P";
+    --ceu: linear-gradient(180deg,rgba(0, 191, 255, 1) 20%, rgba(255, 255, 255, 1) 68%);
+}
+
+body {
+    font-family: var(--font);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
 @import url(1°-login.css);
 @import url(2°-o-jogo.css);

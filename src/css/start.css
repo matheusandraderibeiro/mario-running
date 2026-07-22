@@ -1,0 +1,209 @@
+#telaInicial {
+    width: 100%;
+    height: 100vh;
+    background: var(--ceu);
+}
+
+#telaInicial main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#telaInicial .telaInicialLogo {
+    top: 15%;
+    z-index: 1;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+}
+
+#telaInicial .telaInicialLogo img {
+    width: 80%;
+}
+
+#telaInicial .telaInicialNuvensTraseiras {
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    animation: nuvensTraseiras linear infinite 50s;
+}
+
+#telaInicial .telaInicialNuvensDianteiras {
+    gap: 20px;
+    z-index: 2;
+    width: 500%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    animation: nuvensDianteiras linear infinite 48s;
+}
+
+#telaInicial .telaInicialNuvensDianteiras div {
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#telaInicial .n0 {
+    width: 15%;
+    margin-bottom: 10%;
+}
+
+#telaInicial .n1 {
+    width: 20%;
+    margin-top: 80%;
+}
+
+#telaInicial .n2 {
+    width: 30%;
+    margin-bottom: 25%;
+}
+
+#telaInicial .n3 {
+    width: 40%;
+    margin-top: 40%;
+}
+
+#telaInicial .n4 {
+    width: 20%;
+    margin-bottom: 30%;
+}
+
+#telaInicial .n5 {
+    width: 10%;
+    height: 10%;
+    margin-top: 30%;
+}
+
+#telaInicial .n6 {
+    width: 15%;
+    height: 13%;
+    margin-bottom: 0%;
+}
+
+#telaInicial .n7 {
+    width: 15%;
+    height: 13%;
+    margin-top: 10%;
+}
+
+#telaInicial .n8 {
+    width: 15%;
+    height: 13%;
+    margin-top: 40%;
+}
+
+#telaInicial .n9 {
+    width: 15%;
+    height: 13%;
+    margin-top: 25%;
+}
+
+#telaInicial .telaInicialInimigos {
+    z-index: 2;
+    position: absolute;
+    bottom: clamp(3.03525rem, 0.073rem + 14.8113vw, 3.6925rem);
+}
+
+#telaInicial .telaInicialGoombas, #telaInicial .telaInicialkoopas {
+    width: 100%;
+    position: relative;
+}
+
+#telaInicial .telaInicialkoopas {
+    bottom: 2.5%;
+    animation: koopas linear infinite 50s;
+}
+
+#telaInicial .telaInicialGoombas {
+    animation: goombas linear infinite 35s;
+}
+
+#telaInicial .telaInicialInimigos .telaInicialkoopas .koopa {
+    width: 17%;
+}
+
+#telaInicial .telaInicialInimigos .telaInicialGoombas .goomba {
+    width: 5%;  
+}
+
+#telaInicial .telaInicialChao {
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+}
+
+#telaInicial .telaInicialChao .Chao_cenario3 {
+    z-index: 1;
+    width: 100%;
+}
+
+#telaInicial .telaInicialMontanhas {
+    bottom: 0;
+    left: -10%;
+    z-index: -1;
+    width: 100%;
+    position: absolute;
+}
+
+#telaInicial .telaInicialMontanhas .conjuntoMontanhas {
+    width: 65%;
+}
+
+
+/*==================================================================== 
+................. ÁREA RESERVADA PARA AS MEDIA QUERYS ................
+====================================================================*/
+
+
+@keyframes goombas {
+    from {
+        right: -105%;
+    } to {
+        right: 140%;
+    }
+}
+
+@keyframes koopas {
+    from {
+        left: -120%;
+    } to {
+        left: 185%;
+    }
+}
+
+@keyframes nuvensTraseiras {
+    from {
+        right: -105%;
+    } to {
+        right: 140%;
+    }
+}
+
+@keyframes nuvensDianteiras {
+    from {
+        right: -600%;
+    } to {
+        right: 400%;
+    }
+}
+
+
+/*==================================================================== 
+................. ÁREA RESERVADA PARA AS MEDIA QUERYS ................
+====================================================================*/
+
+
+@media screen  and (min-width: 411px) {
+    #telaInicial .telaInicialInimigos {
+        bottom: clamp(3.88875rem, 0.2351rem + 14.1889vw, 4.048375rem);  
+    }
+}
