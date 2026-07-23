@@ -173,19 +173,19 @@
     cursor: pointer;
     font-weight: bold;
     padding: .5rem .4rem;
-    background-color: var(--botao);
+    background-color: var(--fundo1);
     border: none;
     box-shadow: 
-        0px 3px 0px 0px var(--botao),
-        0px -3px 0px 0px var(--botao),
-        3px 0px 0px 0px var(--botao),
-        -3px 0px 0px 0px var(--botao),
-        0px 0px 0px 2px var(--botao),
-        0px 6px 0px 0px #000000,
-        0px -6px 0px 0px #000000,
-        6px 0px 0px 0px #000000,
-        -6px 0px 0px 0px #000000,
-     0px 0px 0px 4.5px #000000;   
+        0px 3px 0px 0px var(--fundo1),
+        0px -3px 0px 0px var(--fundo1),
+        3px 0px 0px 0px var(--fundo1),
+        -3px 0px 0px 0px var(--fundo1),
+        0px 0px 0px 2px var(--fundo1),
+        0px 6px 0px 0px var(--contorno),
+        0px -6px 0px 0px var(--contorno),
+        6px 0px 0px 0px var(--contorno),
+        -6px 0px 0px 0px var(--contorno),
+     0px 0px 0px 4.5px var(--contorno);   
 } 
 
 /*==================================================================== 
@@ -222,6 +222,14 @@
         right: -600%;
     } to {
         right: 400%;
+    }
+}
+
+@keyframes option {
+    from {
+        rotate: 0deg;
+    } to {
+        rotate: 360deg;
     }
 }
 
