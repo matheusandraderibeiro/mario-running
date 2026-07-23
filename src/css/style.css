@@ -47,6 +47,7 @@ body {
 }
 
 body, #menuOptions .sair {
+    overflow: hidden;
     font-family: var(--font);
 }
 
