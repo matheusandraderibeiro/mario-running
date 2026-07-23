@@ -42,6 +42,10 @@
 ........................ ESTILIZAÇÃO UNIVERSAL .......................
 ====================================================================*/
 
+body {
+    overflow: hidden;
+}
+
 body, #menuOptions .sair {
     font-family: var(--font);
 }
