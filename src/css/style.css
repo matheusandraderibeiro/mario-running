@@ -54,6 +54,10 @@ body, #menuOptions .sair {
 
 /*========================== TELA DE OPÇÃO =========================*/
 
+#campoOptions {
+    display: none;
+}
+
 #fundoStatico {
     z-index: 4;
     width: 100%;
