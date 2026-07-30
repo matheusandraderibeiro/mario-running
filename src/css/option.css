@@ -129,6 +129,16 @@
     background-image: url(../img/icons8-volume-alto-64.png);
 }
 
+.menuOptions .optBotao .iconEfeito {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../img/icons8-notas-musicais-64.png);
+}
+
 .menuOptions input[type="range"] {
     width: 60%;
     height: 37%;
@@ -203,4 +213,24 @@ input[type="range"]::-moz-range-thumb {
 
 .aberto {
     display: inline-block;
+}
+
+.menuOptions .optBotao .iconSemVolume {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../img/icons8-mudo-64.png);
+}
+
+.menuOptions .optBotao .iconSemEfeito {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../img/notaMusicalMute.png);
 }
