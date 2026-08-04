@@ -11,6 +11,7 @@
     width: 100%;
     display: flex;
     position: absolute;
+    align-items: center;
     flex-direction: row;
     justify-content: center;
 }
