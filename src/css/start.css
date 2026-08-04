@@ -1,6 +1,39 @@
 #telaInicial {
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: var(--ceu);
+    transform: rotate(90deg);
+}
 
+#telaInicial .telaInicialChao {
+    top: 60%;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#telaInicial .telaInicialChao .Chao_cenario3 {
+    z-index: 0;
+    width: 100%;
+}
+
+/* #telaInicial .telaInicialChao {
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+}
+
+#telaInicial .telaInicialChao .Chao_cenario3 {
+    z-index: 1;
+    width: 100%;
+}
+
+
+#telaInicial {
+    width: 100%;
     height: 100vh;
     background: var(--ceu);
 }
@@ -168,14 +201,13 @@
 }
 
 #telaInicial .telaInicialBotao {
-    font-family: var(--font);
-    padding: .3rem .1rem;
+    border: none;
     font-size: 1rem;
     cursor: pointer;
     font-weight: bold;
     padding: .5rem .4rem;
+    font-family: var(--font);
     background-color: var(--fundo1);
-    border: none;
     box-shadow: 
         0px 3px 0px 0px var(--fundo1),
         0px -3px 0px 0px var(--fundo1),
@@ -186,17 +218,17 @@
         0px -6px 0px 0px var(--contorno),
         6px 0px 0px 0px var(--contorno),
         -6px 0px 0px 0px var(--contorno),
-     0px 0px 0px 4.5px var(--contorno);   
-} 
+        0px 0px 0px 4.5px var(--contorno);   
+}  */
 
 /*==================================================================== 
 ................. ÁREA RESERVADA PARA AS MEDIA QUERYS ................
 ====================================================================*/
 
 
-@keyframes goombas {
+/* @keyframes goombas {
     from {
-        right: -105%;
+        right: -200%;
     } to {
         right: 140%;
     }
@@ -232,7 +264,7 @@
     } to {
         rotate: 360deg;
     }
-}
+} */
 
 
 /*==================================================================== 
@@ -240,8 +272,161 @@
 ====================================================================*/
 
 
-@media screen  and (min-width: 411px) {
+/* @media screen  and (min-width: 411px) {
+    #telaInicial .telaInicialLogo img {
+        width: 60%;
+    }   
+
+    #telaInicial .n5 {
+        margin-top: 20%;
+    }
+    
+    #telaInicial .n8 {
+        margin-top: 20%;
+    }
+
     #telaInicial .telaInicialInimigos {
         bottom: clamp(3.88875rem, 0.2351rem + 14.1889vw, 4.048375rem);  
     }
 }
+
+@media screen  and (min-width: 768px) {
+    #telaInicial .telaInicialInimigos {
+        bottom: clamp(7.36rem, -1.5879rem + 18.6173vw, 8.3025rem); 
+    }
+
+    #telaInicial .telaInicialInimigos .telaInicialkoopas .koopa {
+        width: 22%;
+    }
+
+    #telaInicial .telaInicialInimigos .telaInicialGoombas .goomba {
+        width: 7%;  
+    }
+}
+
+@media screen  and (min-width: 850px) {
+    #telaInicial .telaInicialInimigos {
+        bottom: clamp(8.3025rem, -0.3031rem + 16.1989vw, 10.07425rem);
+    }
+}
+
+@media screen  and (min-width: 1280px) {
+    #telaInicial .telaInicialLogo img {
+        width: 30%;
+    }
+
+    #telaInicial .n0 {
+        width: 15%;
+        margin-bottom: 2%;
+    }
+
+    #telaInicial .n1 {
+        width: 20%;
+        margin-top: 80%;
+    }
+
+    #telaInicial .n2 {
+        width: 30%;
+        margin-bottom: 25%;
+    }
+
+    #telaInicial .n3 {
+        width: 40%;
+        margin-top: 40%;
+    }
+
+    #telaInicial .n4 {
+        width: 20%;
+        margin-bottom: 30%;
+    }
+
+    #telaInicial .n5 {
+        width: 6%;
+        height: 11%;
+        margin-top: 5%;
+    }
+
+    #telaInicial .n6 {
+        width: 7%;
+        height: 12%;
+        margin-bottom: 0%;
+    }
+
+    #telaInicial .n7 {
+        width: 9%;
+        height: 14%;
+        margin-top: 2%;
+    }
+
+    #telaInicial .n8 {
+        width: 7%;
+        height: 12%;
+        margin-top: 7%;
+    }
+
+    #telaInicial .n9 {
+        width: 8%;
+        height: 13%;
+        margin-top: 9%;
+    }
+
+    #telaInicial .telaInicialInimigos {
+        bottom: 7.8%; 
+    }
+
+    #telaInicial .telaInicialInimigos .telaInicialkoopas .koopa {
+        width: 25%;
+    }
+
+    #telaInicial .telaInicialInimigos .telaInicialGoombas .goomba {
+        width: 8.5%;  
+    }
+
+    #telaInicial .telaInicialChao {
+        bottom: -20%;
+        width: 100%;
+        position: absolute;
+    }
+
+    #telaInicial .telaInicialMontanhas .conjuntoMontanhas {
+        width:32%;
+    }
+
+    #telaInicial .telaInicialBotaoContent {
+        bottom: 20%;
+    }
+
+    #telaInicial .telaInicialBotao {
+        width: 8rem;
+        font-size: 1.2rem;
+        padding: 1rem 0.5rem;
+        box-shadow: 
+            0px 5px 0px 0px var(--fundo1),
+            5px 0px 0px 0px var(--fundo1),
+            0px -5px 0px 0px var(--fundo1),
+            -5px 0px 0px 0px var(--fundo1),
+            0px 0px 0px 3.7px var(--fundo1),
+            0px 10px 0px 0px var(--contorno),
+            10px 0px 0px 0px var(--contorno),
+            0px -10px 0px 0px var(--contorno),
+            -10px 0px 0px 0px var(--contorno),
+            0px 0px 0px 6.8px var(--contorno);
+    }#telaInicial .telaInicialBotao:active {
+        width: 7.4rem;
+        font-size: 1rem;
+        padding: .9rem 0.3rem;
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    #telaInicial .telaInicialChao {
+        bottom: -20%;
+    }
+}
+
+@media (min-width: 1440px) and (min-height: 900px) {
+    #telaInicial .telaInicialChao {
+        bottom: -17%;
+    }
+} */
+
