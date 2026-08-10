@@ -1,25 +1,275 @@
-#telaInicial {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    background: var(--ceu);
+/*====================================================================
+    .gameStage
+    -----------
+    Ocupa a tela real do dispositivo.
+
+    Mobile-first: por padrão (< 1280px, mobile e tablet), o conteúdo é
+    rotacionado 90° para simular o modo paisagem enquanto o aparelho
+    fica deitado na mão. A técnica usada é "swap + rotate":
+    1) o elemento nasce com largura/altura trocadas (100dvh x 100dvv),
+    2) é ancorado com left:100% (viewport inteiro),
+    3) e rotacionado 90° a partir do canto superior esquerdo.
+    O resultado matemático é que os 4 cantos do elemento rotacionado
+    coincidem exatamente com os 4 cantos do viewport real — ele passa
+    a se comportar, para fins de layout dos filhos, como uma tela
+    paisagem comum (útil detalhe: os filhos continuam sendo
+    dimensionados no sistema de coordenadas ORIGINAL, não rotacionado,
+    então basta tratá-los normalmente).
+
+    Usamos dvh/dvw (dynamic viewport units) em vez de vh/vw porque em
+    navegadores mobile a barra de endereço some/aparece ao rolar,
+    e vh/vw não acompanham essa mudança — causando "pulos" de layout.
+====================================================================*/
+
+.gameStage {
+    top: 0;
+    left: 100%;
+    width: 100dvh;
+    height: 100dvw;
+    overflow: hidden;
+    position: fixed;
     transform: rotate(90deg);
+    transform-origin: top left;
 }
 
-#telaInicial .telaInicialChao {
-    top: 60%;
-    width: 100%;
-    display: flex;
+/*====================================================================
+    .gameWorld
+    -----------
+    Mundo do jogo com proporção fixa (16:9), escolhida por ser a
+    proporção mediana entre as resoluções-alvo do projeto (mobile e
+    desktop "padrão"), minimizando corte nas duas pontas da faixa
+    (tablets mais "quadrados" de um lado, ultrawide/notch do outro).
+
+    Estratégia "cover": o mundo SEMPRE preenche o .gameStage por
+    inteiro, nunca sobra espaço vazio (letterbox) — quando a proporção
+    real da tela diverge do 16:9, o excedente é cortado pelo
+    overflow:hidden do .gameStage.
+
+    A matemática usa dvh/dvw diretamente (em vez de container query
+    units) para calcular, em CSS puro, o menor tamanho que ainda
+    garante cobertura total nos dois eixos — o mesmo princípio de um
+    background-size: cover, mas aplicado a um elemento real. Como o
+    .gameStage, no modo rotacionado, tem width:100dvh e height:100dvw,
+    essas mesmas unidades servem de referência direta ao tamanho do
+    palco em qualquer um dos dois modos (rotacionado ou não), sem
+    depender de container queries.
+
+    Tudo dentro do .gameWorld é posicionado em % relativos a ele.
+    Como a proporção do mundo nunca muda, a relação entre os
+    elementos (ex: onde o chão termina x onde os pés do Mario ficam)
+    é geometricamente constante em qualquer resolução.
+====================================================================*/
+
+.gameWorld {
+    left: 50%;
+    bottom: 0;
     position: absolute;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
+    background: var(--ceu);
+    transform: translateX(-50%);
+    width: max(100dvh, calc(100dvw * 16 / 9));
+    height: max(100dvw, calc(100dvh * 9 / 16));
 }
 
-#telaInicial .telaInicialChao .Chao_cenario3 {
-    z-index: 0;
+/*====================================================================
+    Chão
+    -----
+    Camada fixada na base do .gameWorld. A altura é definida em %
+    da altura do mundo (não em px), então escala junto com tudo o
+    resto. Os tiles usam height:100% + width:auto para preservar a
+    proporção nativa do sprite (387:160) e permitir loop horizontal
+    (a repetição em flex já prepara o terreno para uma futura
+    animação de scroll infinito).
+====================================================================*/
+
+.telaInicialChao {
+    left: 0;
+    bottom: 0;
     width: 100%;
+    position: absolute;
+    background-size: auto 100%;
+    height: var(--chao-altura);
+    background-repeat: repeat-x;
+    background-position: left bottom;
+    background-image: url(../img/cenario3.png);
 }
+
+/*====================================================================
+    Montanhas
+    ----------
+    Camada estática atrás do chão. O conjunto-montanhas fica perto da
+    esquerda e a montanha-solitaria perto da direita, ambas dentro da
+    --area-segura-x (para não serem cortadas nas resoluções mais
+    "quadradas", tipo tablet). A altura visual (42% do mundo) fica
+    "empilhada" sobre a altura do chão, mas a camada é ancorada em
+    bottom:0 (não em bottom: var(--chao-altura)) — ver comentário na
+    regra abaixo para o motivo exato.
+
+    z-index abaixo do chão (que não declara z-index, ficando no
+    empilhamento natural acima) para as montanhas ficarem atrás — e
+    para a sobreposição intencional na base ficar escondida.
+====================================================================*/
+
+.telaInicialMontanhas {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 65%;
+    z-index: -1;
+    position: absolute;
+    pointer-events: none;
+    /* Ancorada em bottom:0 (base real do mundo, mesma referência do
+       chão) em vez de bottom: var(--chao-altura). Motivo: o sprite
+       do chão (cenario3.png) tem ~10,6% de espaço TRANSPARENTE no
+       próprio topo (reservado pra tufos de grama aparecerem por
+       cima da faixa de terra) — a CAIXA do chão é mais alta do que
+       o desenho realmente visível nela. Se as montanhas parassem
+       exatamente na borda da caixa do chão, sobraria esse intervalo
+       transparente entre elas e a terra visível, parecendo flutuar.
+       Ancorando em bottom:0, a base da montanha fica propositalmente
+       por trás da parte opaca do chão (que é desenhado por cima,
+       apesar do z-index:-1 daqui), escondendo a emenda. Como
+       consequência, a faixa correspondente a --chao-altura da
+       montanha fica escondida atrás do chão — só os ~20% de cima
+       (42% - 22%) ficam realmente visíveis, o que é o comportamento
+       esperado aqui (camadas de fundo costumam "continuar" por
+       baixo do primeiro plano). */
+}
+
+.telaInicialMontanhas div {
+    bottom: 0;
+    height: 100%;
+    display: block;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.telaInicialMontanhas .conjuntoMontanhas {
+    left: var(--area-segura-x);
+    aspect-ratio: 130 / 224;
+    background-image: url(../img/conjunto-montanhas.png);
+}
+
+.telaInicialMontanhas .montanhaSolitaria {
+    right: var(--area-segura-x);
+    aspect-ratio: 65 / 127;
+    background-image: url(../img/montanha-solitaria.png);
+}
+
+/*====================================================================
+    Inimigos
+    ---------
+    Goombas andam para a esquerda, Koopa e Blockhopper andam para a
+    direita, todos em loop infinito atravessando o .gameWorld de
+    ponta a ponta (entram/saem por fora da área visível — o próprio
+    corte do "cover" já disfarça o ponto onde eles somem e reaparecem,
+    então não precisam respeitar --area-segura-x).
+
+    Cada sprite tem sua própria margem de espaço transparente na
+    base (verificado nos GIFs originais), diferente da altura total
+    da imagem — por isso o "bottom" de cada um desconta essa fração
+    específica, para o pé DESENHADO (não a borda invisível do
+    arquivo) encostar exatamente no topo do chão. Diferente das
+    montanhas, aqui a sobra não pode ficar escondida atrás do chão:
+    o inimigo precisa aparecer em pé, na frente do terreno.
+====================================================================*/
+
+.telaInicialInimigos {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.inimigo {
+    height: var(--inimigo-altura);
+    display: block;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.goomba {
+    height: var(--goomba-altura);
+    aspect-ratio: 300 / 400;
+    background-image: url(../img/goomba.gif);
+    /* padding transparente na base do sprite: 41px de 400 (10,25%) */
+    bottom: calc(var(--chao-linha-base) - (var(--goomba-altura) * 0.1025));
+    animation: andarEsquerda linear infinite 50s;
+}
+
+.goomba2 {
+    animation-delay: -2s;
+}
+
+.koopa {
+    aspect-ratio: 256 / 256;
+    background-image: url(../img/Koopa.gif);
+    /* O Koopa deste projeto é o "Koopa Paratroopa" (com asas) — voa,
+       não caminha sobre o chão, então não usa --chao-linha-base como
+       referência. O valor abaixo é só estético (altura de voo),
+       ajuste livre ao gosto. */
+    bottom: 20%;
+    animation: andarDireita linear infinite 50s;   
+}
+
+.blockhopper {
+    aspect-ratio: 189 / 400;
+    background-image: url(../img/blockhopper.gif);
+    /* padding transparente na base do sprite: 13px de 400 (3,25%) */
+    bottom: calc(var(--chao-linha-base) - (var(--inimigo-altura) * 0.0325));
+    animation: andarDireita linear infinite 50s;   
+    animation-delay: -15s;
+    transform: scaleX(-1);
+}
+
+@keyframes andarEsquerda {
+    from {right: -200%;} 
+    to {right: 140%;}
+}
+
+@keyframes andarDireita {
+    from { left: -120%; }
+    to { left: 185%; }
+}
+
+
+/*====================================================================
+    Desktop (>= 1280px): já é paisagem por natureza, sem rotação.
+====================================================================*/
+
+@media screen and (min-width: 1280px) {
+
+    .gameStage {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        transform: none;
+    }
+
+    /* No desktop o .gameStage não é mais invertido (largura real =
+       vw, altura real = dvh) — por isso a fórmula do "cover" precisa
+       usar vw/dvh nessa ordem normal, e não dvh/dvw como no modo
+       rotacionado (mobile/tablet). Sem este bloco, o .gameWorld
+       continuava lendo a fórmula do modo rotacionado mesmo no
+       desktop, invertendo largura e altura do palco no cálculo. */
+    .gameWorld {
+        width: max(100vw, calc(100dvh * 16 / 9));
+        height: max(100dvh, calc(100vw * 9 / 16));
+    }
+}
+
+
+/*==================================================================== 
+................. ÁREA RESERVADA PARA AS MEDIA QUERYS ................
+====================================================================*/
+
 
 /* #telaInicial .telaInicialChao {
     bottom: 0;

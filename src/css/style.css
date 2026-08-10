@@ -39,17 +39,83 @@
 
     /*=========== Cenário ==========*/
     --ceu: linear-gradient(180deg,rgba(0, 191, 255, 1) 20%, rgba(255, 255, 255, 1) 68%);
+
+    /* Altura do chão em % da altura do .gameWorld. Usada tanto pelo
+       chão quanto por qualquer elemento que precise "encostar" nele
+       (montanhas, personagens, inimigos), garantindo que todos usem
+       a mesma referência de linha de terreno. */
+    --chao-altura: 22%;
+
+    /* Linha onde o chão fica visualmente sólido "na maior parte da
+       largura" (terra + grama curta), medida a partir da base do
+       mundo — diferente de --chao-altura (que é só o tamanho da
+       CAIXA do sprite). O sprite cenario3.png reserva ~61% da
+       própria altura como espaço transparente para os arbustos
+       grandes (que só aparecem em alguns trechos do tile); a "linha
+       de base" real, presente ao longo de quase toda a largura, fica
+       bem mais embaixo do que o topo da caixa. Calculado como:
+       (1 - 97/160) * --chao-altura. É essa linha — não o topo da
+       caixa do chão — que qualquer personagem em pé (inimigos,
+       Mario) deve usar como referência para os pés. */
+    --chao-linha-base: 8.6625%;
+
+    /* Margem horizontal mínima (em % da largura do mundo) que
+       sobrevive ao corte da estratégia "cover" em cada faixa de
+       resolução. Não existe um valor único ideal para todas: mobile
+       tolera margem quase zero (as proporções já são próximas de
+       16:9), mas tablet e desktop precisam de mais espaço — os
+       valores por faixa são sobrescritos em start.css. Este é só o
+       padrão mobile-first. */
+    --area-segura-x: -1%;
+
+    /* Altura dos inimigos (goomba, koopa, blockhopper) em % da
+       altura do .gameWorld — mesma lógica do --chao-altura, um
+       valor único usado por todos os inimigos para manter a escala
+       consistente entre eles. */
+    --inimigo-altura: 14%;
+
+    /* Goomba usa uma escala própria, menor que os outros inimigos —
+       o valor compartilhado (--inimigo-altura) ficava desproporcional
+       nele especificamente. */
+    --goomba-altura: 7%;
 }
 
 /*==================================================================== 
 ........................ ESTILIZAÇÃO UNIVERSAL .......................
 ====================================================================*/
 
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
 body {
+    position: relative;
     overflow: hidden;
     user-select: none;
     -ms-user-select: none;
     -moz-user-select: none;
     font-family: var(--font);
     -webkit-user-select: none;
+    /* Fallback visível apenas se, por algum motivo, o .gameStage
+       não cobrir 100% da tela (ex: navegador sem suporte a dvh/cqw).
+       Mantém a cor do céu como "letterbox" de segurança. */
+    background: var(--ceu);
 }
+
+
+/*====================================================================
+    Tablet (faixa entre mobile e desktop, ainda rotacionado): a
+    proporção real dessas telas é a mais distante do 16:9 de toda a
+    faixa-alvo (chega a ~14,3% de corte lateral no pior caso), por
+    isso precisa da margem de segurança mais generosa.
+====================================================================*/
+@media screen and (min-width: 700px) and (max-width: 1279px) {
+    :root {
+        --area-segura-x: 12%;
+    }
+}
+
+/*====================================================================
+    Desktop (>= 1280px): já é paisagem por natureza, sem rotação.
+====================================================================*/

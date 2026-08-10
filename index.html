@@ -2,7 +2,7 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, git log --onelinemaximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>Mario Running</title>
         <link rel="stylesheet" href="src/css/style.css">
         <link rel = "shortcut icon" href ="src/img/icon-mario.ico">
@@ -10,8 +10,24 @@
 
     <body id="telaInicial">
         <audio id="efeitosSonoros" src="./src/audio/puloMario.m4a"></audio>
-        <audio id="telaInicialTheme" src="./src/audio/Super Mario World Title Theme.mp3" loop></audio>
-        <main>
+        <audio id="telaInicialTheme" src="./src/audio/Super_Mario_World_Title_Theme.mp3" loop></audio>
+
+        <!--
+            .gameStage: ocupa a tela real do dispositivo. Em mobile/tablet
+            (< 1280px) ele é rotacionado 90° para simular o modo paisagem.
+            A partir de 1280px (desktop), fica sem rotação (já é paisagem).
+
+            .gameWorld: mundo de proporção fixa (16:9) que sempre cobre
+            o .gameStage por inteiro (estratégia "cover", como
+            background-size: cover), cortando o excedente nas bordas
+            quando a proporção da tela real for diferente de 16:9.
+            Tudo dentro dele (chão, montanhas, personagens) é posicionado
+            em % relativos a essa proporção fixa — por isso a relação
+            entre os elementos se mantém idêntica em qualquer resolução.
+        -->
+        <div class="gameStage">
+            <div class="gameWorld">
+                <main>
             <article id="campoOptions">
                 <!-- <img id="options" src="./src/img/guear.png" alt="engrenagem">
 
@@ -89,20 +105,26 @@
                 </div>
             </article>
              -->
-            <div class="telaInicialChao">
-                <img class="Chao_cenario3" src="./src/img/cenario3.png" alt="chao" draggable="false">
-                <img class="Chao_cenario3" src="./src/img/cenario3.png" alt="chao" draggable="false">
-                <img class="Chao_cenario3" src="./src/img/cenario3.png" alt="chao" draggable="false">
-            </div>
-            
-            <!-- <div class="telaInicialMontanhas">
-                <img class="conjuntoMontanhas" src="./src/img/conjunto-montanhas.png" alt="" draggable="false">
-            </div> -->
+                    <div class="telaInicialMontanhas">
+                        <div class="conjuntoMontanhas"></div>
+                        <div class="montanhaSolitaria"></div>
+                    </div>
 
-            <!-- <div class="telaInicialBotaoContent">
-                <button class="telaInicialBotao">Start</button>
-            </div> -->
-        </main>
+                    <div class="telaInicialChao"></div>
+
+                    <div class="telaInicialInimigos">
+                        <div class="inimigo goomba goomba1"></div>
+                        <div class="inimigo goomba goomba2"></div>
+                        <div class="inimigo koopa"></div>
+                        <div class="inimigo blockhopper"></div>
+                    </div>
+
+                    <!-- <div class="telaInicialBotaoContent">
+                        <button class="telaInicialBotao">Start</button>
+                    </div> -->
+                </main>
+            </div>
+        </div>
         <script type="module" src="./src/js/main.js"></script>
     </body>
 </html>
