@@ -61,16 +61,16 @@ export function controleVolume() {
         });
     });
 
-    // window.addEventListener("load", () => {
-    //     if(!audio) return;
-    //     audio.play().catch(()=> {
-    //         const iniciar = ()=> {
-    //             audio.play();
-    //             document.removeEventListener("click", iniciar);
-    //             document.removeEventListener("keydown", iniciar);
-    //         }
-    //         document.addEventListener("click", iniciar);
-    //         document.addEventListener("keydown", iniciar);
-    //     });
-    // });
+    window.addEventListener("load", () => {
+        if(!audio) return;
+        audio.play().catch(()=> {
+            const iniciar = ()=> {
+                audio.play();
+                document.removeEventListener("click", iniciar);
+                document.removeEventListener("keydown", iniciar);
+            }
+            document.addEventListener("click", iniciar);
+            document.addEventListener("keydown", iniciar);
+        });
+    });
 }
