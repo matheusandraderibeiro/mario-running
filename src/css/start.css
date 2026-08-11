@@ -158,6 +158,197 @@
 }
 
 /*====================================================================
+    Nuvens
+    -------
+    Três camadas independentes, criando parallax: quanto mais ao
+    fundo, mais devagar, um pouco menores e com opacidade reduzida
+    (simula neblina/distância atmosférica -- reforça a profundidade
+    além da diferença de velocidade).
+
+    - Distantes: bem atrás de tudo (inclusive das montanhas), bem
+      devagar, pequenas e com opacidade reduzida.
+    - Traseiras: atrás das montanhas, ritmo médio.
+    - Dianteiras: na frente de tudo (inclusive da futura logo), mais
+      rápidas e um pouco maiores.
+
+    Todas animam da direita para a esquerda em loop infinito,
+    reaproveitando "andarEsquerda" (right: -200% a 140%).
+
+    z-index: distantes = -3 (atrás das traseiras), traseiras = -2
+    (atrás das montanhas, que são -1), dianteiras = 10 (acima de
+    tudo, inclusive da logo que entrará depois no HTML).
+====================================================================*/
+
+.telaInicialNuvensDistantes,
+.telaInicialNuvensTraseiras,
+.telaInicialNuvensDianteiras {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+}
+
+.telaInicialNuvensDistantes {
+    z-index: -3;
+}
+
+.telaInicialNuvensTraseiras {
+    z-index: -2;
+}
+
+.telaInicialNuvensDianteiras {
+    z-index: 10;
+}
+
+.nuvem {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation-name: andarEsquerda;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.nuvemGrande {
+    aspect-ratio: 348 / 206;
+    background-image: url(../img/grande-nuvem.png);
+}
+
+.nuvemPequena {
+    aspect-ratio: 920 / 488;
+    background-image: url(../img/pequena-nuvem.png);
+}
+
+/* --- Camada distante: as menores, mais lentas e esmaecidas --- */
+
+.telaInicialNuvensDistantes .nuvem {
+    height: 8%;
+    opacity: 0.6;
+}
+
+.nuvemDist1 { top: 4%;  animation-duration: 130s; animation-delay: 0s; }
+.nuvemDist2 { top: 16%; animation-duration: 150s; animation-delay: -60s; }
+.nuvemDist3 { top: 26%; animation-duration: 115s; animation-delay: -90s; }
+.nuvemDist4 { top: 10%; animation-duration: 140s; animation-delay: -30s; }
+
+/* --- Camada de trás: menores e mais lentas --- */
+
+.telaInicialNuvensTraseiras .nuvem {
+    height: 12%;
+}
+
+.nuvemTras1 { top: 8%;  animation-duration: 70s; animation-delay: 0s; }
+.nuvemTras2 { top: 22%; animation-duration: 85s; animation-delay: -30s; }
+.nuvemTras3 { top: 14%; animation-duration: 65s; animation-delay: -50s; }
+.nuvemTras4 { top: 30%; animation-duration: 78s; animation-delay: -15s; }
+.nuvemTras5 { top: 4%;  animation-duration: 90s; animation-delay: -65s; }
+.nuvemTras6 { top: 18%; animation-duration: 72s; animation-delay: -40s; }
+
+/* --- Camada da frente: maiores e mais rápidas --- */
+
+.telaInicialNuvensDianteiras .nuvem {
+    height: 18%;
+}
+
+.nuvemFrente1 { top: 5%;  animation-duration: 35s; animation-delay: -10s; }
+.nuvemFrente2 { top: 18%; animation-duration: 42s; animation-delay: -25s; }
+.nuvemFrente3 { top: 10%; animation-duration: 38s; animation-delay: 0s; }
+.nuvemFrente4 { top: 26%; animation-duration: 45s; animation-delay: -18s; }
+.nuvemFrente5 { top: 2%;  animation-duration: 40s; animation-delay: -33s; }
+.nuvemFrente6 { top: 14%; animation-duration: 48s; animation-delay: -5s; }
+
+/*====================================================================
+    Logo
+    -----
+    Centralizada horizontalmente, perto do topo do céu. Funciona
+    também como título da tela inicial, por isso um tamanho generoso
+    (45% da largura do mundo).
+
+    z-index: 5 -- acima do chão/montanhas/inimigos/nuvens de trás,
+    mas abaixo da camada de nuvens da frente (10), para elas
+    passarem por cima da logo, como pedido.
+====================================================================*/
+
+.telaInicialLogo {
+    top: var(--area-segura-y);
+    left: 50%;
+    z-index: 5;
+    width: 32%;
+    position: absolute;
+    aspect-ratio: 3840 / 2160;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translateX(-50%);
+    background-image: url(../img/Logo.png);
+}
+
+/*====================================================================
+    Botão Start
+    ------------
+    Posição em % (bottom) para acompanhar a altura das moitas do
+    cenário -- fica visualmente "no meio do mato". Tamanho em rem
+    (não em %) de propósito: é um controle de UI, não um elemento de
+    cenário, então deve manter uma área de toque confortável e
+    constante em qualquer resolução, em vez de encolher no mobile ou
+    ficar desproporcional no ultrawide.
+
+    Borda "pixelada" feita em camadas de box-shadow (mesmo padrão já
+    usado no menu de opções), sem imagens: contorno preto grosso por
+    fora, fundo amarelo por dentro.
+====================================================================*/
+
+.telaInicialBotao {
+    left: 50%;
+    bottom: 14%;
+    z-index: 6;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    padding: .5rem 1.4rem;
+    font-size: 1rem;
+    font-family: var(--font);
+    transform: translateX(-50%);
+    background-color: var(--fundo1);
+    box-shadow:
+        0px 4px 0px 0px var(--fundo1),
+        0px -4px 0px 0px var(--fundo1),
+        4px 0px 0px 0px var(--fundo1),
+        -4px 0px 0px 0px var(--fundo1),
+        0px 0px 0px 2.5px var(--fundo1),
+        0px 8px 0px 0px var(--contorno),
+        0px -8px 0px 0px var(--contorno),
+        8px 0px 0px 0px var(--contorno),
+        -8px 0px 0px 0px var(--contorno),
+        0px 0px 0px 6px var(--contorno);
+}
+
+.telaInicialBotao:active {
+    bottom: calc(14% - 3px);
+    box-shadow:
+        0px 2px 0px 0px var(--fundo1),
+        0px -2px 0px 0px var(--fundo1),
+        2px 0px 0px 0px var(--fundo1),
+        -2px 0px 0px 0px var(--fundo1),
+        0px 0px 0px 1.5px var(--fundo1),
+        0px 5px 0px 0px var(--contorno),
+        0px -5px 0px 0px var(--contorno),
+        5px 0px 0px 0px var(--contorno),
+        -5px 0px 0px 0px var(--contorno),
+        0px 0px 0px 3.7px var(--contorno);
+}
+
+@media screen and (min-width: 1280px) {
+    .telaInicialBotao {
+        padding: 1.1rem 1.8rem;
+        font-size: 1.3rem;
+    }
+}
+
+/*====================================================================
     Inimigos
     ---------
     Goombas andam para a esquerda, Koopa e Blockhopper andam para a
@@ -244,6 +435,12 @@
 ====================================================================*/
 
 @media screen and (min-width: 1280px) {
+
+    :root {
+        /* 3440x1440 e o pior caso do grupo desktop (corte de ~25,6%
+           no topo). */
+        --area-segura-y: 26%;
+    }
 
     .gameStage {
         top: 0;

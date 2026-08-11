@@ -68,6 +68,16 @@
        padrão mobile-first. */
     --area-segura-x: -1%;
 
+    /* Margem vertical mínima (em % da altura do mundo) que sobrevive
+       ao corte no TOPO da estratégia "cover" -- o .gameWorld é
+       ancorado pelo bottom (pra nunca perder o chão), então qualquer
+       corte por divergência de proporção acontece sempre em cima.
+       Célulares "alongados" (391x844 e afins) e o ultrawide
+       (3440x1440) são os piores casos; tablet não corta na vertical
+       (a proporção deles diverge do 16:9 na horizontal, não aqui).
+       Valores por faixa sobrescritos em start.css. */
+    --area-segura-y: 20%;
+
     /* Altura dos inimigos (goomba, koopa, blockhopper) em % da
        altura do .gameWorld — mesma lógica do --chao-altura, um
        valor único usado por todos os inimigos para manter a escala
@@ -113,9 +123,20 @@ body {
 @media screen and (min-width: 700px) and (max-width: 1279px) {
     :root {
         --area-segura-x: 12%;
+        /* Tablet não sofre corte vertical (a divergência do 16:9
+           deles é horizontal, não vertical) -- margem pequena só
+           por respiro estético. */
+        --area-segura-y: 2%;
     }
 }
 
 /*====================================================================
     Desktop (>= 1280px): já é paisagem por natureza, sem rotação.
+    O ultrawide (3440x1440) é o pior caso de corte vertical de toda
+    a faixa-alvo (~25,6%), por isso a margem generosa aqui.
 ====================================================================*/
+@media screen and (min-width: 1280px) {
+    :root {
+        --area-segura-y: 26%;
+    }
+}
