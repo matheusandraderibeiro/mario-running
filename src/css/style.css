@@ -1,4 +1,3 @@
-@import url(./start.css);
 @import url(./option.css);
 
 @font-face {
@@ -88,6 +87,14 @@
        o valor compartilhado (--inimigo-altura) ficava desproporcional
        nele especificamente. */
     --goomba-altura: 7%;
+
+    /* Altura do Mario e dos obstáculos "grandes" (blockhopper,
+       cano-verde) na tela de jogo -- Mario precisa se destacar como
+       o maior personagem em cena, mas canos/blocos ficam próximos
+       da altura dele (referência clássica: eles não são muito
+       menores que o encanador). */
+    --mario-altura: 18%;
+    --obstaculo-altura: 16%;
 }
 
 /*==================================================================== 

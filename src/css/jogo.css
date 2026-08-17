@@ -1,0 +1,306 @@
+/*====================================================================
+    .gameStage / .gameWorld
+    -------------------------
+    Idêntico ao usado em start.css -- ver comentários lá para a
+    explicação completa da rotação e da estratégia "cover" 16:9.
+====================================================================*/
+
+.gameStage {
+    top: 0;
+    left: 100%;
+    width: 100dvh;
+    height: 100dvw;
+    overflow: hidden;
+    position: fixed;
+    transform: rotate(90deg);
+    transform-origin: top left;
+}
+
+.gameWorld {
+    left: 50%;
+    bottom: 0;
+    position: absolute;
+    aspect-ratio: 16 / 9;
+    background: var(--ceu);
+    transform: translateX(-50%);
+    width: max(100dvh, calc(100dvw * 16 / 9));
+    height: max(100dvw, calc(100dvh * 9 / 16));
+}
+
+@media screen and (min-width: 1280px) {
+    .gameStage {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        transform: none;
+    }
+
+    .gameWorld {
+        width: max(100vw, calc(100dvh * 16 / 9));
+        height: max(100dvh, calc(100vw * 9 / 16));
+    }
+}
+
+/*====================================================================
+    Esteiras rolantes (chão e montanhas)
+    --------------------------------------
+    Técnica padrão de loop infinito sem emenda: a sequência de tiles
+    é duplicada 2x dentro de um flex row, e a animação move o row
+    inteiro de translateX(0) até translateX(-50%) -- exatamente a
+    largura de UMA das duas cópias. Quando a animação reinicia, a
+    segunda cópia já está visualmente idêntica à posição inicial da
+    primeira, então o corte do loop é imperceptível.
+
+    Cada esteira fica dentro de um contêiner com overflow:hidden e
+    width:100% (recortando o que sobra da faixa, que é sempre mais
+    larga que 100% do mundo).
+====================================================================*/
+
+.jogoChao,
+.jogoMontanhas {
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+}
+
+.jogoChao {
+    bottom: 0;
+    height: var(--chao-altura);
+}
+
+.jogoMontanhas {
+    bottom: 0;
+    height: 65%;
+    z-index: -3;
+    /* Mesmo motivo do start.css: o chão tem espaço transparente no
+       próprio topo (arbustos), então a base das montanhas fica de
+       propósito atrás da parte opaca do chão (bottom:0, não
+       var(--chao-linha-base)), escondendo a emenda. */
+}
+
+.esteiraChao,
+.esteiraMontanhas {
+    display: flex;
+    height: 100%;
+    width: fit-content;
+    align-items: flex-end;
+}
+
+.esteiraChao {
+    animation: rolarEsquerdaMetade 6s linear infinite;
+}
+
+.esteiraMontanhas {
+    /* mais lenta que o chão -- parallax: fundo se move mais devagar
+       que o primeiro plano, reforçando a sensação de profundidade.
+       Duração recalculada para a nova largura da metade (3 montanhas
+       + espaçadores maiores). */
+    animation: rolarEsquerdaMetade 20s linear infinite;
+}
+
+.espacoMontanha {
+    height: 100%;
+    flex-shrink: 0;
+    /* aspect-ratio em vez de width:% -- o pai (.esteiraMontanhas) é
+       width:fit-content (tamanho definido PELO conteúdo), então uma
+       largura em % aqui criaria referência circular (a % não tem
+       como se resolver, e o CSS trata como "auto" => colapsa pra 0).
+       aspect-ratio contorna isso: calcula a largura a partir da
+       ALTURA do próprio espaçador, que é sempre definida. Equivale
+       a ~26% da largura do mundo quando a altura é 65%. */
+    aspect-ratio: 32 / 45;
+}
+
+@keyframes rolarEsquerdaMetade {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+.chaoTile,
+.montanha {
+    height: 100%;
+    flex-shrink: 0;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.chaoTile.cenario3 {
+    aspect-ratio: 387 / 160;
+    background-image: url(../img/cenario3.png);
+}
+
+.montanha.conjuntoMontanhas,
+.montanha.conjuntoMontanhas2 {
+    aspect-ratio: 130 / 224;
+    background-image: url(../img/conjunto-montanhas.png);
+}
+
+.montanha.montanhaSolitaria,
+.montanha.montanhaSolitaria2 {
+    aspect-ratio: 65 / 127;
+    background-image: url(../img/montanha-solitaria.png);
+}
+
+/*====================================================================
+    Mario
+    ------
+    Fica parado no canto esquerdo -- a sensação de movimento vem do
+    cenário passando, não dele. Respeita --area-segura-x (mesma
+    margem usada pelas montanhas na tela inicial) para nunca ficar
+    cortado nas resoluções mais "quadradas" (tablet).
+====================================================================*/
+
+.jogoMario {
+    left: var(--area-segura-x);
+    bottom: var(--chao-linha-base);
+    z-index: 4;
+    position: absolute;
+    height: var(--mario-altura);
+    aspect-ratio: 256 / 256;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-image: url(../img/mario-run.png);
+}
+
+/*====================================================================
+    Obstáculos
+    -----------
+    Goomba, blockhopper e cano-verde intercalados, cada um com seu
+    próprio loop para a esquerda (mesma lógica "andarEsquerda" já
+    usada na tela inicial, só que agora ninguém vai para a direita).
+    Atrasos diferentes para não aparecerem todos alinhados.
+====================================================================*/
+
+.jogoObstaculos {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+}
+
+.obstaculo {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation-name: andarEsquerda;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes andarEsquerda {
+    from { right: -25%; }
+    to   { right: 105%; }
+}
+
+.obstaculo.goomba {
+    height: var(--goomba-altura);
+    aspect-ratio: 300 / 400;
+    background-image: url(../img/goomba.gif);
+    /* padding transparente na base do sprite: 41px de 400 (10,25%) */
+    bottom: calc(var(--chao-linha-base) - (var(--goomba-altura) * 0.1025));
+}
+
+.obstaculo.blockhopper {
+    height: var(--obstaculo-altura);
+    aspect-ratio: 189 / 400;
+    background-image: url(../img/blockhopper.gif);
+    /* padding transparente na base do sprite: 13px de 400 (3,25%) */
+    bottom: calc(var(--chao-linha-base) - (var(--obstaculo-altura) * 0.0325));
+}
+
+.obstaculo.canoVerde {
+    height: var(--obstaculo-altura);
+    aspect-ratio: 323 / 322;
+    background-image: url(../img/cano-verde.png);
+    /* padding na base é praticamente zero (1px de 322) -- ignorado */
+    bottom: var(--chao-linha-base);
+}
+
+.obst1 { animation-duration: 3.8s;   animation-delay: 0s; }
+.obst2 { animation-duration: 3.8s; animation-delay: -1.5s; }
+.obst3 { animation-duration: 3.8s; animation-delay: -3s; }
+.obst4 { animation-duration: 3.8s; animation-delay: -0.8s; }
+.obst5 { animation-duration: 3.8s; animation-delay: -4s; }
+
+/*====================================================================
+    Nuvens
+    -------
+    Três camadas, mesmo efeito de profundidade da tela inicial:
+    distante (atrás de tudo, esmaecida) < traseira (atrás das
+    montanhas) < dianteira (na frente de tudo).
+====================================================================*/
+
+.jogoNuvensDistantes,
+.jogoNuvensTraseiras,
+.jogoNuvensDianteiras {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+}
+
+.jogoNuvensDistantes { z-index: -4; }
+.jogoNuvensTraseiras { z-index: -2; }
+.jogoNuvensDianteiras { z-index: -1; }
+
+.jogoNuvensDistantes .nuvem,
+.jogoNuvensTraseiras .nuvem,
+.jogoNuvensDianteiras .nuvem {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation-name: andarEsquerda;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.jogoNuvensDistantes .nuvem {
+    height: 6%;
+    opacity: 0.6;
+}
+
+.jogoNuvensTraseiras .nuvem {
+    height: 12%;
+}
+
+.jogoNuvensDianteiras .nuvem {
+    height: 18%;
+}
+
+.nuvemGrande {
+    aspect-ratio: 348 / 206;
+    background-image: url(../img/grande-nuvem.png);
+}
+
+.nuvemPequena {
+    aspect-ratio: 920 / 488;
+    background-image: url(../img/pequena-nuvem.png);
+}
+
+.nuvemDist1 { top: 2%;  animation-duration: 30s; animation-delay: 0s; }
+.nuvemDist2 { top: 18%; animation-duration: 30s; animation-delay: -70s; }
+.nuvemDist3 { top: 32%; animation-duration: 30s; animation-delay: -115s; }
+.nuvemDist4 { top: 40%; animation-duration: 30s; animation-delay: -120s; }
+.nuvemDist5 { top: 50%; animation-duration: 30s; animation-delay: -100s; }
+.nuvemDist6 { top: 55%; animation-duration: 30s; animation-delay: -115s; }
+
+.nuvemTras1 { top: 2%;  animation-duration: 12s; animation-delay: 0s; }
+.nuvemTras2 { top: 16%; animation-duration: 12s; animation-delay: -35s; }
+.nuvemTras3 { top: 30%; animation-duration: 12s; animation-delay: -60s; }
+.nuvemTras4 { top: 42%; animation-duration: 12s; animation-delay: -20s; }
+
+.nuvemFrente1 { top: 3%;  animation-duration: 8s; animation-delay: -8s; }
+.nuvemFrente2 { top: 18%; animation-duration: 8s; animation-delay: -30s; }
+.nuvemFrente3 { top: 32%; animation-duration: 8s; animation-delay: -18s; }
+.nuvemFrente4 { top: 46%; animation-duration: 8s; animation-delay: -40s; }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Mario Running</title>
+        <link rel="stylesheet" href="src/css/style.css">
+        <link rel="stylesheet" href="src/css/jogo.css">
+        <link rel = "shortcut icon" href ="src/img/icon-mario.ico">
+    </head>
+
+    <body id="telaJogo">
+        <audio id="efeitosSonoros" src="./src/audio/puloMario.m4a"></audio>
+
+        <!--
+            Mesma base estrutural da tela inicial (.gameStage / .gameWorld),
+            ver comentário em index.html para os detalhes de rotação e
+            proporção fixa. Aqui muda só o CONTEÚDO de dentro: chão e
+            montanhas viram esteiras rolantes (loop infinito para a
+            esquerda), os inimigos só andam para a esquerda (sem ida e
+            volta), e o Mario fica parado no canto esquerdo -- a
+            sensação de movimento vem do cenário passando, não dele.
+        -->
+        <div class="gameStage">
+            <div class="gameWorld">
+                <main>
+
+                    <div class="jogoNuvensDistantes">
+                        <div class="nuvem nuvemPequena nuvemDist1"></div>
+                        <div class="nuvem nuvemGrande nuvemDist2"></div>
+                        <div class="nuvem nuvemPequena nuvemDist3"></div>
+                        <div class="nuvem nuvemGrande nuvemDist4"></div>
+                        <div class="nuvem nuvemGrande nuvemDist5"></div>
+                        <div class="nuvem nuvemPequena nuvemDist6"></div>
+                    </div>
+
+                    <div class="jogoNuvensTraseiras">
+                        <div class="nuvem nuvemGrande nuvemTras1"></div>
+                        <div class="nuvem nuvemPequena nuvemTras2"></div>
+                        <div class="nuvem nuvemGrande nuvemTras3"></div>
+                        <div class="nuvem nuvemPequena nuvemTras4"></div>
+                    </div>
+
+                    <!--
+                        Esteira de montanhas: sequência duplicada 2x
+                        (rolarEsquerdaMetade translateX de 0 a -50%),
+                        para o loop fechar sem emenda visível.
+                    -->
+                    <div class="jogoMontanhas">
+                        <div class="esteiraMontanhas">
+                            <div class="montanha conjuntoMontanhas"></div>
+                            <div class="espacoMontanha"></div>
+                            <div class="montanha montanhaSolitaria"></div>
+                            <div class="espacoMontanha"></div>
+                            <div class="montanha conjuntoMontanhas2"></div>
+                            <div class="espacoMontanha"></div>
+                            <!-- sequência duplicada para o loop -->
+                            <div class="montanha conjuntoMontanhas"></div>
+                            <div class="espacoMontanha"></div>
+                            <div class="montanha montanhaSolitaria"></div>
+                            <div class="espacoMontanha"></div>
+                            <div class="montanha conjuntoMontanhas2"></div>
+                            <div class="espacoMontanha"></div>
+                        </div>
+                    </div>
+
+                    <!--
+                        Esteira do chão: cenario3 repetido, sequência
+                        duplicada 2x pelo mesmo motivo das montanhas.
+                        (só cenario3 de propósito -- cenario4 tem uma
+                        linha de base visual diferente, misturar os
+                        dois gerava inconsistência.)
+                    -->
+                    <div class="jogoChao">
+                        <div class="esteiraChao">
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <!-- sequência duplicada para o loop -->
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                            <div class="chaoTile cenario3"></div>
+                        </div>
+                    </div>
+
+                    <div class="jogoMario"></div>
+
+                    <!--
+                        Obstáculos: goomba, blockhopper e cano-verde
+                        intercalados, cada um andando para a esquerda
+                        em loop, com atrasos diferentes para não
+                        aparecerem todos juntos.
+                    -->
+                    <div class="jogoObstaculos">
+                        <div class="obstaculo goomba obst1"></div>
+                        <div class="obstaculo canoVerde obst2"></div>
+                        <div class="obstaculo blockhopper obst3"></div>
+                        <div class="obstaculo goomba obst4"></div>
+                        <div class="obstaculo canoVerde obst5"></div>
+                    </div>
+
+                    <div class="jogoNuvensDianteiras">
+                        <div class="nuvem nuvemPequena nuvemFrente1"></div>
+                        <div class="nuvem nuvemGrande nuvemFrente2"></div>
+                        <div class="nuvem nuvemPequena nuvemFrente3"></div>
+                        <div class="nuvem nuvemGrande nuvemFrente4"></div>
+                    </div>
+
+                </main>
+            </div>
+
+            <article id="campoOptions">
+                <img id="options" src="./src/img/guear.png" alt="engrenagem">
+
+                <div class="fundoStatico"></div>
+
+                <section class="menuOptions">
+                    <div>
+                        <button class="sair">X</button>
+                    </div>
+
+                    <article>
+                        <div>
+                            <button id="botaoEfeito" class="optBotao" data-icon-on="iconEfeito" data-icon-off="iconSemEfeito">
+                                <span class="iconEfeito"></span>
+                            </button>
+                            <input type="range" name="volume" id="volumeEfeitos" class="volume" data-audio="efeitosSonoros" min="0" max="100" value="50">
+                        </div>
+                    </article>
+                </section>
+            </article>
+        </div>
+        <script type="module" src="./src/js/jogo.js"></script>
+    </body>
+</html>
